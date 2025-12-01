@@ -31,7 +31,7 @@ public class Move {
 
     @Override
     public String toString() {
-        return from + " -> " + to + " (" + dropCount + ", " + d + ")";
+        return from + " -> " + to + " (" + dropCount + ", " + d.toString() + ")";
     }
 
     public void addChild(Move m) {
