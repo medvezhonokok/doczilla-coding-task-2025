@@ -4,10 +4,27 @@ import exceptions.FilledFlaskException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-public record Flask(List<Drop> drops, int capacity) {
+public final class Flask {
+    private final List<Drop> drops;
+    private final int capacity;
+
+    public Flask(List<Drop> drops, int capacity) {
+        this.drops = drops;
+        this.capacity = capacity;
+    }
+
     public Flask(int capacity) {
         this(new ArrayList<>(capacity), capacity);
+    }
+
+    public List<Drop> getDrops() {
+        return drops;
+    }
+
+    public int getCapacity() {
+        return capacity;
     }
 
     public int size() {
@@ -22,14 +39,19 @@ public record Flask(List<Drop> drops, int capacity) {
         return drops != null && size() == capacity;
     }
 
+    public boolean canFill(Flask flask) {
+        if (isEmpty() || flask.isFull() || flask.isEmpty()) return false;
+        return last().equals(flask.last());
+    }
+
     public boolean canFill(Drop drop) {
         if (isFull()) return false;
-        if (isEmpty()) return true;
+        if (isEmpty() && capacity > 0) return true;
 
         return last().equals(drop);
     }
 
-    private void fill(Drop drop) {
+    public void fill(Drop drop) {
         assert drop != null;
 
         if (isFull()) {
@@ -54,7 +76,7 @@ public record Flask(List<Drop> drops, int capacity) {
     }
 
     public boolean isCompleted() {
-        if (!isFull()) return false;
+        if (isEmpty()) return true;
 
         Drop first = this.drops.getFirst();
         for (int i = 1; i < size(); i++) {
@@ -71,4 +93,27 @@ public record Flask(List<Drop> drops, int capacity) {
         return "(" + String.join(" | ", drops.stream().map(Drop::toString).toArray(String[]::new)) + ")"
                + " [" + filled + "/" + capacity + "]";
     }
+
+    public List<Drop> drops() {
+        return drops;
+    }
+
+    public int capacity() {
+        return capacity;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if (obj == null || obj.getClass() != this.getClass()) return false;
+        var that = (Flask) obj;
+        return Objects.equals(this.drops, that.drops) &&
+               this.capacity == that.capacity;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(drops, capacity);
+    }
+
 }
