@@ -2,15 +2,59 @@ import model.Game;
 
 public class Solution {
     public static void main(String[] args) {
-        Game game2 = new Game(
+//        run(new Game(
+//                new Object[][]{
+//                        {1, 2, 1},
+//                        {2, 1, 2},
+//                        {},
+//                        {}
+//                }, 3
+//        ));
+
+//        run(new Game(
+//                new Object[][]{
+//                        {},
+//                        {},
+//                        {},
+//                        {},
+//                        {},
+//                        {},
+//                        {'к', 'о', 'ж', 'з', 'г', 'с', 'ф'},
+//                        {}
+//                }, 10
+//        ));
+
+//        run(new Game(
+//                new Object[][]{
+//                        {"r", "r", "b", "b"},
+//                        {"b", "r", "b", "r"},
+//                        {},
+//                        {}
+//                }, 4
+//        ));
+
+//        run(new Game(
+//                new Object[][]{
+//                        {"r", "g", "b", "y"},
+//                        {"g", "y", "r", "b"},
+//                        {"b", "r", "y", "g"},
+//                        {"y", "b", "g", "r"},
+//                        {},
+//                        {}
+//                }, 4
+//        ));
+
+        run(new Game(
                 new Object[][]{
-                        {1, 2, 1},
-                        {2, 1, 2},
+                        {"r", "b", "r"},
+                        {"b", "r", "b"},
                         {},
                         {}
                 }, 3
-        );
+        ));
+    }
 
-        game2.solve();
+    private static void run(Game game) {
+        game.solve();
     }
 }

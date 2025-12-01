@@ -19,6 +19,7 @@ public class Game {
                 Drop drop = switch (color) {
                     case Integer i -> new Drop(new Color(i));
                     case String s -> new Drop(new Color(s));
+                    case Character ch -> new Drop(new Color(Character.toString(ch)));
                     default -> throw new IllegalArgumentException("Color must be Integer or String");
                 };
 
