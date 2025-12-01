@@ -31,94 +31,106 @@
 \author{\underline{\href{http://t.me/medvezhonokok}{@medvezhonokok}}}
 
 \begin{document}
-\maketitle
+    \maketitle
 
-Для удобства, введем несколько определений:
+    Для удобства, введем несколько определений:
 
-\begin{itemize}
-    \item $\mathcal{F}$ - множество всех колб
-    \item $a \Rightarrow b$ - возможность перелить жидкость из колбы $a$, в колбу $b = \{0, 1\}$
-    \item $|f|$ - количество капель в колбе $f$
-\end{itemize}
+    \begin{itemize}
+        \item $\mathcal{F}$ - множество всех колб
+        \item $a \Rightarrow b$ - возможность перелить жидкость из колбы $a$, в колбу $b = \{0, 1\}$
+        \item $|f|$ - количество капель в колбе $f$
+    \end{itemize}
 
-Тогда задача не имеет решения, если: не существует колбы, из которой можно перелить жидкость в любую другую колбу:
+    Тогда задача не имеет решения, если: не существует колбы, из которой можно перелить жидкость в любую другую колбу:
 
-\begin{center}
-    $\nexists f \in \mathcal{F} : \nexists g \in \mathcal{F} : g \neq f : (f \Rightarrow g) \equiv 1$
-\end{center}
+    \begin{center}
+        $\nexists f \in \mathcal{F} : \nexists g \in \mathcal{F} : g \neq f : (f \Rightarrow g) \equiv 1$
+    \end{center}
 
-ТЗ не требует оптимального решения $\Rightarrow$ идем жадным алгоритмом. Запоминаем каждый шаг (\textit{Move m \{from, to, color\}}) в \textit{Set<Move> moves}. Несложно заметить, что если в \textit{moves} уже есть текущий шаг $\Rightarrow$ цикл $\Rightarrow$ этот шаг не приведет к ответу. Давайте перебирать все \textbf{хорошие} шаги, пока решение есть \textit{(can\_solve)} или хорошие шаги не кончатся.
-
-\vspace{15pt}
-\begin{algorithmic}[1]
-\Procedure{getGoodMoves}{$\mathcal{F}$, $parent$}
-    \State $moves \gets [\ ]$
-    \For{$i \gets 0$ до $|\mathcal{F}|-1$}
-        \State $f \gets \mathcal{F}_i$
-        \If{\Call{isEmpty}{$f$}} \textbf{continue} \EndIf
-        \For{$j \gets 0$ до $|\mathcal{F}|-1$}
-            \If{$i = j$} \textbf{continue} \EndIf
-            \State $g \gets \mathcal{F}_j$
-            \If{\Call{isFull}{$g$}} \textbf{continue} \EndIf
-            \If{$f \Rightarrow g \equiv 1$}
-                \State $moves \gets moves \cup \{(i, j, \Call{last}{f})\}$
-            \EndIf
-        \EndFor
-    \EndFor
-    \State \Return $moves$
-\EndProcedure
-\end{algorithmic}
-\vspace{15pt}
-Давайте перебирать все \textbf{хорошие} шаги, пока решение есть \textit{(can\_solve)} или \textbf{хорошие} шаги не кончатся.
-
-\vspace{15pt}
-\begin{algorithmic}[1]
-\Procedure{canSolve}{$\mathcal{F}$}
-    \For{$i \gets 0$ до $|\mathcal{F}|-1$}
-        \State $f \gets \mathcal{F}_i$
-        \If{\Call{isEmpty}{$f$}} \textbf{continue} \EndIf
-        \For{$j \gets 0$ до $|\mathcal{F}|-1$}
-            \If{$i = j$} \textbf{continue} \EndIf
-            \State $g \gets \mathcal{F}_j$
-            \If{$f \Rightarrow g \equiv 1$}
+    ТЗ не требует оптимального решения $\Rightarrow$ идем жадным алгоритмом. Запоминаем каждый шаг (\textit{Move m \{from, to, color\}}) в \textit{Set<Move> moves}. Несложно заметить, что если в \textit{moves} уже есть текущий шаг $\Rightarrow$ цикл $\Rightarrow$ этот шаг не приведет к ответу. Давайте перебирать все \textbf{хорошие} шаги, пока решение есть \textit{(can\_solve)} или хорошие шаги не кончатся.
+    \vspace{15pt}
+    \begin{algorithmic}[1]
+        \Procedure{getGoodMoves}{$\mathcal{F}$, $parent$}
+            \State $moves \gets [\ ]$
+            \For{$i \gets 0$ до $|\mathcal{F}|-1$}
+                \State $f \gets \mathcal{F}_i$
+                \If{\Call{isEmpty}{$f$}} \textbf{continue} \EndIf
+                \For{$j \gets 0$ до $|\mathcal{F}|-1$}
+                    \If{$i = j$} \textbf{continue} \EndIf
+                    \State $g \gets \mathcal{F}_j$
+                    \If{\Call{isFull}{$g$}} \textbf{continue} \EndIf
+                    \If{$f \Rightarrow g \equiv 1$}
+                        \State $moves \gets moves \cup \{(i, j, \Call{last}{f})\}$
+                    \EndIf
+                \EndFor
+            \EndFor
+            \State \Return $moves$
+        \EndProcedure
+    \end{algorithmic}
+    \vspace{15pt}
+    \begin{algorithmic}[1]
+        \Procedure{canSolve}{$\mathcal{F}$}
+            \For{$i \gets 0$ до $|\mathcal{F}|-1$}
+                \State $f \gets \mathcal{F}_i$
+                \If{\Call{isEmpty}{$f$}} \textbf{continue} \EndIf
+                \For{$j \gets 0$ до $|\mathcal{F}|-1$}
+                    \If{$i = j$} \textbf{continue} \EndIf
+                    \State $g \gets \mathcal{F}_j$
+                    \If{$f \Rightarrow g \equiv 1$}
+                        \State \Return $true$
+                    \EndIf
+                \EndFor
+            \EndFor
+            \State \Return $false$
+        \EndProcedure
+    \end{algorithmic}
+    \vspace{15pt}
+    Дальше построим граф шагов, для начального состояния получаем список \textbf{хороших шагов}, высчитываем состояние $\mathcal{F}_i$ после применения $i$-го шага, если для $\mathcal{F}_i$ есть следующие хорошие шаги, то повторяем алгоритм пока задача не решится, если мы понимаем, что задача не может быть решена, то поднимаемся до родителя $i$-го шага.
+    \vspace{15pt}
+    \begin{algorithmic}[1]
+        \Procedure{getSolution}{$flasks$, $root$, $visited$}
+            \If{\Call{isSolved}{$flasks$}}
                 \State \Return $true$
             \EndIf
-        \EndFor
-    \EndFor
-    \State \Return $false$
-\EndProcedure
-\end{algorithmic}
-\vspace{15pt}
-Дальше построим граф шагов, для начального состояния получаем список \textbf{хороших шагов}, высчитываем состояние $\mathcal{F}_i$ после применения $i$-го шага, если для $\mathcal{F}_i$ есть следующие хорошие шаги, то повторяем алгоритм пока задача не решится, если мы понимаем, что задача не может быть решена, то поднимаемся до родителя $i$-го шага.
-\vspace{15pt}
-\begin{algorithmic}[1]
-\Procedure{getSolution}{$flasks$, $root$, $visited$}
-    \If{\Call{isSolved}{$flasks$}}
-        \State \Return $true$
-    \EndIf
 
-    \State $state \gets \Call{getStateHash}{flasks}$
-    \If{$state \in visited$} // cycle!
-        \State \Return $false$
-    \EndIf
+            \State $state \gets \Call{getStateHash}{flasks}$
+            \If{$state \in visited$} // cycle!
+            \State \Return $false$
+            \EndIf
 
-    \State $visited \gets visited \cup \{state\}$
+            \State $visited \gets visited \cup \{state\}$
 
-    \For{$move \in \Call{getGoodMoves}{flasks, root}$}
-        \State $\Call{commit}{move, flasks}$
-        \State $\Call{addChild}{root, move}$
+            \For{$move \in \Call{getGoodMoves}{flasks, root}$}
+                \State $\Call{commit}{move, flasks}$
+                \State $\Call{addChild}{root, move}$
 
-        \If{\Call{canSolve}{$flasks$, $move$, $visited$}}
-            \State \Return $true$
-        \EndIf
+                \If{\Call{canSolve}{$flasks$, $move$, $visited$}}
+                    \State \Return $true$
+                \EndIf
 
-        \State $\Call{rollback}{move, flasks}$
-        \State $\Call{removeChild}{root, move}$
-    \EndFor
+                \State $\Call{rollback}{move, flasks}$
+                \State $\Call{removeChild}{root, move}$
+            \EndFor
 
-    \State $visited \gets visited \setminus \{state\}$
-    \State \Return $false$
-\EndProcedure
-\end{algorithmic}
+            \State $visited \gets visited \setminus \{state\}$
+            \State \Return $false$
+        \EndProcedure
+    \end{algorithmic}
+    \vspace{15pt}
+    Таким образом, у нас в \textit{root} будет лежать последний шаг, который привел к решению. Тогда восстановить ответ можно просто перебирая его родителей \textit{(root.parent)} пока он есть.
+    \vspace{15pt}
+    \begin{algorithmic}[1]
+        \Procedure{getSolution}{$tail$}
+            \State $history \gets \text{[]}$
 
+            \While{$tail \neq \text{null}$}
+                \State $history \gets history \cup \{current\}$
+                \State $tail \gets tail.parent$
+            \EndWhile
+
+            \State \Return $history.\text{reversed()}$ // т.к. идем с последнего хода до первого
+        \EndProcedure
+    \end{algorithmic}
+    \vspace{15pt}
+    \vspace{15pt}
 \end{document}
