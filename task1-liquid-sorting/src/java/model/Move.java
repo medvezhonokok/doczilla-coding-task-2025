@@ -1,7 +1,5 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class Move {
@@ -9,7 +7,6 @@ public class Move {
     private final int to;
     private final Drop d;
     private final Move parent;
-    private final List<Move> child;
     private int dropCount;
 
     public Move(int from, int to, Drop d, Move parent) {
@@ -18,7 +15,6 @@ public class Move {
         this.d = d;
         this.dropCount = 0;
         this.parent = parent;
-        this.child = new ArrayList<>();
     }
 
     public int getDropCount() {
@@ -34,13 +30,6 @@ public class Move {
         return from + " -> " + to + " (" + dropCount + ", " + d.toString() + ")";
     }
 
-    public void addChild(Move m) {
-        child.add(m);
-    }
-
-    public void removeChild(Move move) {
-        child.remove(move);
-    }
 
     @Override
     public boolean equals(Object obj) {
@@ -62,12 +51,12 @@ public class Move {
         return d;
     }
 
-    public List<Move> getChild() {
-        return child;
+    public Move getParent() {
+        return parent;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(from, to, d, parent, child);
+        return Objects.hash(from, to, d, parent);
     }
 }

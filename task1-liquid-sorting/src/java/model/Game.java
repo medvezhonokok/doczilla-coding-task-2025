@@ -39,34 +39,33 @@ public class Game {
         return true;
     }
 
-    private boolean canSolve(Move root, Set<String> visited) {
+    private Move canSolve(Move root, Set<String> visited) {
         String state = flasks.stream().map(String::valueOf).collect(Collectors.joining(", "));
 
         if (isSolved()) {
             visited.add(state);
-            return true;
+            return root;
         }
 
         if (visited.contains(state)) {
-            return false;
+            return null;
         }
 
         visited.add(state);
 
         for (Move move : getGoodMoves(root)) {
             commit(move);
-            root.addChild(move);
 
-            if (canSolve(move, visited)) {
-                return true;
+            Move lastMove = canSolve(move, visited);
+            if (lastMove != null) {
+                return lastMove;
             }
 
             rollback(move);
-            root.removeChild(move);
         }
 
         visited.remove(state);
-        return false;
+        return null;
     }
 
     private List<Move> getGoodMoves(Move parent) {
@@ -121,19 +120,19 @@ public class Game {
     public void solve() {
         System.out.println(this);
 
-        Move root = new Move(-1, -1, null, null);
         Set<String> visited = new LinkedHashSet<>();
+        Move last = canSolve(null, visited);
 
-        if (canSolve(root, visited)) {
+        if (last != null) {
             System.out.println("Solution found!");
+            List<Move> movesHistory = new ArrayList<>();
 
-            while (root != null && !root.getChild().isEmpty()) {
-                root = root.getChild().getFirst();
-                System.out.println(root);
+            while (last != null) {
+                movesHistory.add(last);
+                last = last.getParent();
             }
 
-            // Опционально, можно посмотреть все итерации решения, как именно ход изменял состояние
-            // visited.forEach(System.out::println);
+            movesHistory.reversed().forEach(System.out::println);
         } else {
             System.out.println("No solution found!");
         }
