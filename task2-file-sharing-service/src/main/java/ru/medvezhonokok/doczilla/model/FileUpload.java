@@ -1,13 +1,14 @@
 package ru.medvezhonokok.doczilla.model;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.Date;
 
 @Entity
-@Table(name = "uploads")
-public class Upload {
+@Table(name = "file_uploads")
+public class FileUpload {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,6 +22,10 @@ public class Upload {
     @CreationTimestamp
     @Column(name = "upload_time", updatable = false)
     private Date uploadTime;
+
+    @Nullable
+    @Column(name = "last_download_time", updatable = true)
+    private Date lastDownloadTime;
 
     public String getHashedFileName() {
         return hashedFileName;
@@ -48,6 +53,15 @@ public class Upload {
 
     public Date getUploadTime() {
         return uploadTime;
+    }
+
+    @Nullable
+    public Date getLastDownloadTime() {
+        return lastDownloadTime;
+    }
+
+    public void setLastDownloadTime(@Nullable Date lastDownloadTime) {
+        this.lastDownloadTime = lastDownloadTime;
     }
 
     public void setUploadTime(Date uploadTime) {

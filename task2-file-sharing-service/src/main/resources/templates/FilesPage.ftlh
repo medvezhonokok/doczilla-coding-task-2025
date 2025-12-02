@@ -1,7 +1,7 @@
 <#import "commons.ftlh" as c>
 
 <@c.page>
-    <div class="documents datatable">
+    <div class="files datatable">
         <table>
             <thead>
             <tr>
@@ -12,22 +12,22 @@
             </tr>
             </thead>
             <tbody>
-            <#if documents?size==0>
+            <#if files?size==0>
                 <tr class="noData">
                     <td colspan="4">
                         No data
                     </td>
                 </tr>
             <#else>
-                <#list documents as document>
+                <#list files as file>
                     <tr>
-                        <td class="login">${document.user.login}</td>
-                        <td class="fileName">${document.hashedFileName}</td>
-                        <td class="uploadTime">${document.uploadTime?string('yyyy-MM-dd HH:mm')}</td>
+                        <td class="login">${file.user.login}</td>
+                        <td class="fileName">${file.hashedFileName}</td>
+                        <td class="uploadTime">${file.uploadTime?string('yyyy-MM-dd HH:mm')}</td>
                         <td class="action">
                             <button
                                     class="copy-link-button"
-                                    data-link="/download/${document.hashedFileName}"
+                                    data-link="/download/${file.hashedFileName}"
                                     onclick="copyToClipboard(this)">
                                 Click to copy
                             </button>
@@ -40,7 +40,7 @@
     </div>
 
     <script>
-        const baseUrl = "http://localhost:8080/";
+        const baseUrl = "http://localhost:8080";
 
         function copyToClipboard(button) {
             notify("Copied!")

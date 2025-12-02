@@ -38,7 +38,7 @@
                 <li><a href="<@spring.url '/'/>">Home</a></li>
                 <#if user??>
                     <li><a href="<@spring.url '/upload'/>">Upload</a></li>
-                    <li><a href="<@spring.url '/documents'/>">Documents</a></li>
+                    <li><a href="<@spring.url '/files'/>">Files</a></li>
                 </#if>
             </ul>
 

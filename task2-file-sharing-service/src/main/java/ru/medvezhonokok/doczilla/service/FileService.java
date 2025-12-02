@@ -4,9 +4,9 @@ import jakarta.transaction.Transactional;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import ru.medvezhonokok.doczilla.model.Upload;
+import ru.medvezhonokok.doczilla.model.FileUpload;
 import ru.medvezhonokok.doczilla.model.User;
-import ru.medvezhonokok.doczilla.repository.UploadRepository;
+import ru.medvezhonokok.doczilla.repository.FileRepository;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,33 +22,27 @@ import java.util.UUID;
 @Service
 public class FileService {
     public final static String UPLOADS_DIR = "uploads/";
-    private final UploadRepository uploadRepository;
+    private final FileRepository fileRepository;
 
-    public FileService(UploadRepository uploadRepository) {
-        this.uploadRepository = uploadRepository;
+    public FileService(FileRepository fileRepository) {
+        this.fileRepository = fileRepository;
     }
 
     @Transactional
-    public void uploadDocument(MultipartFile document, User author) throws IOException {
-        if (document == null || document.isEmpty()) {
+    public void uploadFile(MultipartFile file, User author) throws IOException {
+        if (file == null || file.isEmpty()) {
             throw new IllegalArgumentException("File is empty");
         }
 
-        String hashedFileName = saveFileToDisk(document);
-
-        Upload upload = new Upload();
+        FileUpload upload = new FileUpload();
         upload.setUser(author);
-        upload.setHashedFileName(hashedFileName);
+        upload.setHashedFileName(saveFileToDisk(file));
 
-        uploadRepository.save(upload);
+        fileRepository.save(upload);
     }
 
-    public List<Upload> findByUserId(Long userId) {
-        return uploadRepository.findByUserId(userId);
-    }
-
-    public List<Upload> getDocuments() {
-        return uploadRepository.findAll();
+    public List<FileUpload> findAll() {
+        return fileRepository.findAll();
     }
 
     private String saveFileToDisk(MultipartFile file) throws IOException {
@@ -84,7 +78,8 @@ public class FileService {
         }
     }
 
-    public java.io.File getFileByHashedName(String hashedFileName) {
-        return new java.io.File(UPLOADS_DIR + hashedFileName);
+    public File getFileForDownload(String hashedFileName) {
+        fileRepository.updateLastDownloadTime(hashedFileName);
+        return new File(UPLOADS_DIR + hashedFileName);
     }
 }

@@ -18,11 +18,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 
 @Controller
-public class DocumentPage extends Page {
+public class FilePage extends Page {
     private final FileService fileService;
 
     @Autowired
-    public DocumentPage(FileService fileService) {
+    public FilePage(FileService fileService) {
         this.fileService = fileService;
     }
 
@@ -31,9 +31,11 @@ public class DocumentPage extends Page {
         User user = getUser(session);
 
         if (user == null) {
+            setMessage(session, "You must be logged in");
             return "redirect:/enter";
         }
-        return "DocumentUploadPage";
+
+        return "FileUploadPage";
     }
 
     @PostMapping("/upload")
@@ -45,31 +47,32 @@ public class DocumentPage extends Page {
         }
 
         try {
-            fileService.uploadDocument(file, user);
+            fileService.uploadFile(file, user);
             setMessage(session, "File uploaded successfully!");
         } catch (Exception e) {
             setMessage(session, "Error: " + e.getMessage());
         }
 
-        return "DocumentUploadPage";
+        return "FileUploadPage";
     }
 
-    @GetMapping("/documents")
-    public String DocumentsPage(HttpSession session, Model model) {
+    @GetMapping("/files")
+    public String files(HttpSession session, Model model) {
         User user = getUser(session);
 
         if (user == null) {
+            setMessage(session, "You must be logged in");
             return "redirect:/enter";
         }
 
-        model.addAttribute("documents", fileService.getDocuments());
+        model.addAttribute("files", fileService.findAll());
 
-        return "DocumentsPage";
+        return "FilesPage";
     }
 
     @GetMapping("/download/{fileName}")
-    public void downloadFile(@PathVariable String fileName, HttpServletResponse response) throws IOException {
-        final File file = fileService.getFileByHashedName(fileName);
+    public void download(@PathVariable String fileName, HttpServletResponse response) throws IOException {
+        final File file = fileService.getFileForDownload(fileName);
 
         if (!file.exists()) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
