@@ -65,7 +65,6 @@ public class Game {
             rollback(move);
         }
 
-        visited.remove(state);
         return null;
     }
 
