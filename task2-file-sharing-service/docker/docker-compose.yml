@@ -1,0 +1,38 @@
+version: '3.8'
+services:
+  maria-db:
+    image: mariadb:10.11
+    container_name: maria-db
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 6B3D6E268DCB76E175A7DB3D9E031349AB2C32654C7E57581A851E64DD6214AB
+      MYSQL_DATABASE: task2
+      MYSQL_USER: root
+      MYSQL_PASSWORD: 6B3D6E268DCB76E175A7DB3D9E031349AB2C32654C7E57581A851E64DD6214AB
+    volumes:
+      - maria_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10	
+
+  pma:
+    image: phpmyadmin/phpmyadmin:5.2.1
+    container_name: phpmyadmin
+    restart: always
+    ports:
+      - "3082:80"
+    depends_on:
+      maria-db:
+        condition: service_healthy
+    environment:
+      PMA_HOST: maria-db
+      PMA_USER: root
+      PMA_PASSWORD: 6B3D6E268DCB76E175A7DB3D9E031349AB2C32654C7E57581A851E64DD6214AB
+      UPLOAD_LIMIT: 100M
+
+volumes:
+  maria_data:
