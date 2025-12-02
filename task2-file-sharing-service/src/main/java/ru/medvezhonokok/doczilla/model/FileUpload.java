@@ -23,7 +23,7 @@ public class FileUpload {
     @Column(name = "upload_time", updatable = false)
     private Date uploadTime;
 
-    @Nullable
+    @CreationTimestamp
     @Column(name = "last_download_time", updatable = true)
     private Date lastDownloadTime;
 
