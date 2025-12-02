@@ -5,6 +5,10 @@ import ru.medvezhonokok.doczilla.form.UserCredentials;
 import ru.medvezhonokok.doczilla.model.User;
 import ru.medvezhonokok.doczilla.repository.UserRepository;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 import java.util.List;
 
 @Service
@@ -19,7 +23,8 @@ public class UserService {
         User user = new User();
         user.setLogin(userCredentials.getLogin());
         userRepository.save(user);
-        userRepository.updatePassword(user.getId(), userCredentials.getLogin(), userCredentials.getPassword());
+        userRepository.updatePassword(user.getId(),
+                getPasswordSha(userCredentials.getLogin(), userCredentials.getPassword()));
         return user;
     }
 
@@ -28,7 +33,7 @@ public class UserService {
     }
 
     public User findByLoginAndPassword(String login, String password) {
-        return login == null || password == null ? null : userRepository.findByLoginAndPassword(login, password);
+        return login == null || password == null ? null : userRepository.findByLoginAndPassword(login, getPasswordSha(login, password));
     }
 
     public User findById(Long id) {
@@ -37,5 +42,19 @@ public class UserService {
 
     public List<User> findAll() {
         return userRepository.findAllByOrderByIdDesc();
+    }
+
+    private String getPasswordSha(String login, String password) {
+        final String salt = "abfb33e9f6ccc";
+        final String combined = salt + login + password;
+
+        try {
+            MessageDigest digest = MessageDigest.getInstance("MD5");
+            byte[] hash = digest.digest(combined.getBytes(StandardCharsets.UTF_8));
+
+            return Base64.getEncoder().encodeToString(hash);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
