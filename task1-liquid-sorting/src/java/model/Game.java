@@ -124,7 +124,7 @@ public class Game {
         Set<String> visited = new LinkedHashSet<>();
         Move last = canSolve(null, visited);
 
-        if (last != null) {
+        if (last != null || isSolved()) {
             System.out.println("Solution found!");
             List<Move> movesHistory = new ArrayList<>();
 
@@ -133,6 +133,7 @@ public class Game {
                 last = last.getParent();
             }
 
+            System.out.println("Need " + movesHistory.size() + " moves");
             movesHistory.reversed().forEach(System.out::println);
         } else {
             System.out.println("No solution found!");
