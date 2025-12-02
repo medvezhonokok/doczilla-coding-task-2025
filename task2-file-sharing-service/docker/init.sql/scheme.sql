@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: maria-db
--- Время создания: Дек 02 2025 г., 18:50
+-- Время создания: Дек 02 2025 г., 21:24
 -- Версия сервера: 10.11.15-MariaDB-ubu2204
 -- Версия PHP: 8.2.27
 
@@ -24,13 +24,14 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `uploads`
+-- Структура таблицы `file_uploads`
 --
 
-CREATE TABLE `uploads` (
+CREATE TABLE `file_uploads` (
   `id` bigint(20) NOT NULL,
+  `last_download_time` datetime(6) DEFAULT NULL,
   `upload_time` datetime(6) DEFAULT NULL,
-  `user_id` bigint(20) DEFAULT NULL,
+  `user_id` bigint(20) NOT NULL,
   `hashed_file_name` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -52,11 +53,11 @@ CREATE TABLE `users` (
 --
 
 --
--- Индексы таблицы `uploads`
+-- Индексы таблицы `file_uploads`
 --
-ALTER TABLE `uploads`
+ALTER TABLE `file_uploads`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `FKoeod66jdi6m0omr3nxw2w47av` (`user_id`);
+  ADD KEY `FKic5c4g630ly489owue7ftava6` (`user_id`);
 
 --
 -- Индексы таблицы `users`
@@ -70,26 +71,26 @@ ALTER TABLE `users`
 --
 
 --
--- AUTO_INCREMENT для таблицы `uploads`
+-- AUTO_INCREMENT для таблицы `file_uploads`
 --
-ALTER TABLE `uploads`
+ALTER TABLE `file_uploads`
   MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT для таблицы `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- Ограничения внешнего ключа сохраненных таблиц
 --
 
 --
--- Ограничения внешнего ключа таблицы `uploads`
+-- Ограничения внешнего ключа таблицы `file_uploads`
 --
-ALTER TABLE `uploads`
-  ADD CONSTRAINT `FKoeod66jdi6m0omr3nxw2w47av` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+ALTER TABLE `file_uploads`
+  ADD CONSTRAINT `FKic5c4g630ly489owue7ftava6` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
