@@ -51,9 +51,12 @@
                     Pay attention
                 </div>
                 <div class="body">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cupiditate ducimus enim facere impedit
-                    nobis,
-                    nulla placeat quam suscipit unde voluptatibus.
+                    Если Вы читате это, то у вас получилось запустить приложение! Congrats!
+                    <br/>
+                    <br/>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda atque commodi eaque excepturi
+                    exercitationem facilis, harum id illo impedit ipsum itaque laudantium molestiae nam, neque nihil
+                    possimus quos sit, suscipit!
                 </div>
                 <div class="footer">
                     <a href="#">View all</a>
