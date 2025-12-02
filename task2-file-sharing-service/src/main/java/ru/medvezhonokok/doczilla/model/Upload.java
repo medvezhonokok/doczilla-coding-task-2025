@@ -26,16 +26,16 @@ public class Upload {
         return hashedFileName;
     }
 
+    public void setHashedFileName(String hashedFileName) {
+        this.hashedFileName = hashedFileName;
+    }
+
     public User getUser() {
         return user;
     }
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public void setHashedFileName(String hashedFileName) {
-        this.hashedFileName = hashedFileName;
     }
 
     public Long getId() {
