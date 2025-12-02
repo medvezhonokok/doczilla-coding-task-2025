@@ -2,6 +2,7 @@ package ru.medvezhonokok.doczilla.service;
 
 import jakarta.transaction.Transactional;
 import org.apache.commons.io.FilenameUtils;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.medvezhonokok.doczilla.model.FileUpload;
@@ -16,6 +17,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -81,5 +83,24 @@ public class FileService {
     public File getFileForDownload(String hashedFileName) {
         fileRepository.updateLastDownloadTime(hashedFileName);
         return new File(UPLOADS_DIR + hashedFileName);
+    }
+
+    @Scheduled(cron = "0 0 0 * * ?")
+    @Transactional
+    public void cleanupOldFiles() throws IOException {
+        Date now = new Date();
+
+        List<FileUpload> oldFiles = fileRepository.findAll().stream()
+                .filter(
+                        f -> f.getLastDownloadTime() != null
+                             && (now.getTime() - f.getLastDownloadTime().getTime()) > 30 * 24L * 60 * 60 * 1000 // 30 дней в mS
+                ).toList();
+
+        for (FileUpload file : oldFiles) {
+            Path filePath = Paths.get(UPLOADS_DIR, file.getHashedFileName());
+            Files.deleteIfExists(filePath);
+
+            fileRepository.delete(file);
+        }
     }
 }
